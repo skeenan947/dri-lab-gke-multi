@@ -1,0 +1,25 @@
+apiVersion: networking.x-k8s.io/v1alpha1
+kind: MultiClusterService
+metadata:
+  name: multi-cluster-service-resource
+  namespace: namespace  # Replace 'namespace' with the actual namespace where the application is deployed
+spec:
+  backend:
+    name: whereami  # Replace 'whereami' with the name of your application's service
+    serviceNamespace: namespace  # Replace 'namespace' with the actual namespace where the application is deployed
+
+---
+apiVersion: networking.x-k8s.io/v1alpha1
+kind: MultiClusterIngress
+metadata:
+  name: mci_resource
+  namespace: namespace  # Replace 'namespace' with the actual namespace where the application is deployed
+spec:
+  rules:
+  - host: INGRESS_VIP  # Replace 'INGRESS_VIP' with the virtual IP (VIP) address for the application
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: multi-cluster-service-resource
+          serviceNamespace: namespace  # Replace 'namespace' with the actual namespace where the MultiClusterService is deployed
